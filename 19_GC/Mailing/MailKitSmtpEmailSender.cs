@@ -1,4 +1,5 @@
 ﻿using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using _19_GC.Configs;
 using MailKit;
 using MailKit.Net.Smtp;
@@ -41,6 +42,7 @@ public class MailKitSmtpEmailSender : IEmailSender, IDisposable, IAsyncDisposabl
         logger.LogDebug("Constructor");
     }
     
+    //Финализатор: вызывается GC перед удалением объекта из памяти
     ~MailKitSmtpEmailSender()
     {
         // Любое исключение в финализаторе приводит к падению процесса
@@ -55,13 +57,15 @@ public class MailKitSmtpEmailSender : IEmailSender, IDisposable, IAsyncDisposabl
         }
     }
 
+    // Диспоузер
     // Dispose и DisposeAsync следуют после конструктора
     public void Dispose()
     {
         Dispose(true);
+        GC.SuppressFinalize(this); // Говорим GC не вызывать финализатор
     }
 
-    public void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (_disposed) return;
         _disposed = true;
@@ -85,6 +89,7 @@ public class MailKitSmtpEmailSender : IEmailSender, IDisposable, IAsyncDisposabl
             await _smtpClient.DisconnectAsync(true);
         }
         _smtpClient.Dispose();
+        GC.SuppressFinalize(this); // Говорим GC не вызывать финализатор
     }
     
     public void Send(
@@ -157,6 +162,7 @@ public class MailKitSmtpEmailSender : IEmailSender, IDisposable, IAsyncDisposabl
         return message;
     }
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ThrowIfDisposed()
     {
         if (_disposed)

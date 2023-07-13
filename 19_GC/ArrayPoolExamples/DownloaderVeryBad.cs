@@ -19,15 +19,14 @@ public static class DownloaderVeryBad
             uri, HttpCompletionOption.ResponseHeadersRead);
         //Dispose() освобождаeт соединение для переиспользования
         await using var contentStream = await response.Content.ReadAsStreamAsync();
+        byte[] buffer = new byte[8192 * 2];
         while (true)
         {
-            byte[] buffer = new byte[8192 * 2];
             int bytesRead = await contentStream.ReadAsync(buffer);
             if (bytesRead == 0)
             {
                 break;
             }
-            Console.WriteLine(bytesRead);
 
             if (bytesRead == buffer.Length)
             {
