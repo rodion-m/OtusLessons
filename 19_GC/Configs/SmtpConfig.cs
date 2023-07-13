@@ -1,4 +1,4 @@
-namespace Lesson.DI.Configs;
+namespace _19_GC.Configs;
 
 #pragma warning disable CS8618
 

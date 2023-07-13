@@ -1,4 +1,4 @@
-﻿namespace Lesson.DI.Infrastructure.Mailing;
+﻿namespace _19_GC.Mailing;
 
 public class ConnectionException : Exception
 {

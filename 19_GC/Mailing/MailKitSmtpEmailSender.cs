@@ -1,13 +1,14 @@
 ﻿using System.Net.Sockets;
-using Lesson.DI.Configs;
+using _19_GC.Configs;
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 
-namespace Lesson.DI.Infrastructure.Mailing;
+namespace _19_GC.Mailing;
 
 // http://www.mimekit.net/docs/html/T_MailKit_Net_Smtp_SmtpClient.htm
 // https://github.com/jstedfast/MailKit/blob/master/Documentation/Examples/SmtpExamples.cs#L93
@@ -21,35 +22,63 @@ namespace Lesson.DI.Infrastructure.Mailing;
 */
 public class MailKitSmtpEmailSender : IEmailSender, IDisposable, IAsyncDisposable
 {
+    private readonly ILogger<MailKitSmtpEmailSender> _logger;
     private readonly SmtpClient _smtpClient;
     private readonly SmtpConfig _config;
     private bool _disposed;
 
     public MailKitSmtpEmailSender(
         IOptions<SmtpConfig> options, 
-        MELProtocolLogger protocolLogger)
+        IProtocolLogger protocolLogger,
+        ILogger<MailKitSmtpEmailSender> logger)
     {
         if (options == null) throw new ArgumentNullException(nameof(options));
         if (protocolLogger == null) throw new ArgumentNullException(nameof(protocolLogger));
-        options.Value.ValidateProperties();
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        //options.Value.ValidateProperties();
         _config = options.Value;
         _smtpClient = new SmtpClient(_config.EnableLogging ? protocolLogger : new NullProtocolLogger());
+        logger.LogDebug("Constructor");
     }
     
+    ~MailKitSmtpEmailSender()
+    {
+        // Любое исключение в финализаторе приводит к падению процесса
+        _logger.LogDebug("Finalizer");
+        try
+        {
+            Dispose(false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error in finalizer");
+        }
+    }
+
     // Dispose и DisposeAsync следуют после конструктора
-    public void Dispose() //ликвидация зависимости
+    public void Dispose()
+    {
+        Dispose(true);
+    }
+
+    public void Dispose(bool disposing)
     {
         if (_disposed) return;
+        _disposed = true;
         if (_smtpClient.IsConnected)
         {
             _smtpClient.Disconnect(true);
         }
-        _smtpClient.Dispose();
-        _disposed = true;
+
+        if (disposing)
+        {
+            _smtpClient.Dispose();
+        }
     }
     public async ValueTask DisposeAsync()
     {
         if (_disposed) return;
+        _disposed = true;
         if (_smtpClient.IsConnected)
         {
             //Есть вероятность эксепшена, тогда часть соединений не закроется никогда

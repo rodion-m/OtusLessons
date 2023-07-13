@@ -1,7 +1,8 @@
 ﻿using System.Text;
 using MailKit;
+using Microsoft.Extensions.Logging;
 
-namespace Lesson.DI.Infrastructure.Mailing
+namespace _19_GC.Mailing
 {
     /// <inheritdoc />
     public class MELProtocolLogger : IProtocolLogger

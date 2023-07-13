@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Lesson.DI.Configs;
+namespace _19_GC.Configs;
 
 public abstract class ValidableConfig
 {

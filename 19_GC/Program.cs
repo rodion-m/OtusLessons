@@ -3,34 +3,28 @@ using _19_GC.Mailing;
 using MailKit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 {
-    var sender = new MailKitSmtpEmailSender(Options.Create(new SmtpConfig()), new NullProtocolLogger(),CreateLogger());
-    sender = null;
+    for (int i = 0; i < 10_000; i++)
+    {
+        var sender = new MailKitSmtpEmailSender(Options.Create(new SmtpConfig()), new NullProtocolLogger(),CreateLogger());
+    }
 }
-
-GC.Collect();
-GC.WaitForPendingFinalizers();
-GC.Collect();
-GC.WaitForPendingFinalizers();
-GC.Collect();
-GC.WaitForPendingFinalizers();
-GC.Collect();
-GC.WaitForPendingFinalizers();
-GC.Collect();
-GC.WaitForPendingFinalizers();
-
-Thread.Sleep(TimeSpan.FromSeconds(10));
 
 Console.WriteLine("Hello, World!");
 
 
 ILogger<MailKitSmtpEmailSender> CreateLogger()
 {
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .WriteTo.Console()
+        .CreateLogger();
+        
     using var loggerFactory = LoggerFactory.Create(builder =>
     {
-        builder.AddConsole();
-        builder.SetMinimumLevel(LogLevel.Debug);
+        builder.AddSerilog();
     });
     return loggerFactory.CreateLogger<MailKitSmtpEmailSender>();
 }
