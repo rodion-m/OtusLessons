@@ -12,8 +12,6 @@ using Serilog;
     }
 }
 
-Console.WriteLine("Hello, World!");
-
 
 ILogger<MailKitSmtpEmailSender> CreateLogger()
 {
