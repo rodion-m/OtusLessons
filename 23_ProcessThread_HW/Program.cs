@@ -1,4 +1,6 @@
-﻿var (file1, file2, file3) = ("file1.txt", "file2.txt", "file3.txt");
+﻿// Задание 1
+
+var (file1, file2, file3) = ("file1.txt", "file2.txt", "file3.txt");
 
 CreateFiles();
 
