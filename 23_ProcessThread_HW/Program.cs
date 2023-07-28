@@ -37,7 +37,6 @@ void CountSpacesInFile(string s)
 
 void CreateFiles()
 {
-    
     var file1Content = "hello world";
     var file2Content = "hello great world";
     var file3Content = "hello funny great world";
