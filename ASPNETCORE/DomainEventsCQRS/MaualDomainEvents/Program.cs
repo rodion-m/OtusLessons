@@ -81,8 +81,10 @@ app.Map("/version", async context =>
 
 app.MapGet("/", () => "Откройте страницы /send или /product");
 app.MapGet("/send", SendMails);
-app.MapGet("/product", () => {
-    DomainEventsManager.Raise(new ProductAdded(new Product() {Name = "Мандарин"}));
+app.MapPost("/product", () => {
+    // логика добавления товара
+    DomainEventsManager.Raise(
+        new ProductAdded(new Product() {Name = "Мандарин"}));
     return "Событие добавление товара вызвано";
 });
 app.MapControllers();

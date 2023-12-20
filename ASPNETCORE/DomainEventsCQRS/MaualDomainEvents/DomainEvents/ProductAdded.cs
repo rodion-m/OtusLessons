@@ -8,6 +8,6 @@ public class ProductAdded : IDomainEvent
     
     public ProductAdded(Product product)
     {
-        Product = product;
+        Product = product ?? throw new ArgumentNullException(nameof(product));
     }
 }

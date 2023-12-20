@@ -6,9 +6,9 @@ public static class DomainEventsManager
 {
     private static readonly ConcurrentDictionary<Type, List<Delegate>> Handlers = new();
 
-    public static void Register<T>(Action<T> eventHandler) where T : IDomainEvent
+    public static void Register<TEvent>(Action<TEvent> eventHandler) where TEvent : IDomainEvent
     {
-        Handlers.AddOrUpdate(typeof(T), 
+        Handlers.AddOrUpdate(typeof(TEvent), 
             addValueFactory: _ => new List<Delegate>() {eventHandler},
             updateValueFactory: (_, delegates) =>
             {
@@ -17,11 +17,11 @@ public static class DomainEventsManager
             });
     }
 
-    public static void Raise<T>(T domainEvent) where T : IDomainEvent
+    public static void Raise<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent
     {
         foreach (Delegate handler in Handlers[domainEvent.GetType()])
         {
-            var action = (Action<T>) handler;
+            var action = (Action<TEvent>) handler;
             action(domainEvent);
         }
     }

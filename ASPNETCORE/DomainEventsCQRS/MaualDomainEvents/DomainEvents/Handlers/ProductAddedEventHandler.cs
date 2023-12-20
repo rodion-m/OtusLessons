@@ -15,7 +15,11 @@ namespace MaualDomainEvents.DomainEvents.Handlers
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
-            DomainEventsManager.Register<ProductAdded>(ev => { _ = SendEmailNotification(ev); });
+            DomainEventsManager.Register<ProductAdded>(
+                productAddedEvent =>
+                {
+                    _ = SendEmailNotification(productAddedEvent);
+                });
         }
 
         private async Task SendEmailNotification(ProductAdded ev)
