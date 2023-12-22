@@ -6,7 +6,7 @@ namespace FluentValidationLesson.Test;
 
 public class AccountValidationTests
 {
-    private readonly AccountValidator _validator = new AccountValidator();
+    private readonly AccountValidator _validator = new();
 
     [Fact]
     public void Account_with_empty_first_name_is_invalid()
@@ -26,7 +26,8 @@ public class AccountValidationTests
     public void Account_with_invalid_email_is_invalid()
     {
         // Arrange
-        var account = new Account("John", "Doe", new Address("123 Main St", "State", "City", "12345"), 
+        var account = new Account(
+            "John", "Doe", new Address("123 Main St", "State", "City", "12345"), 
             new List<EmailAddress> { new EmailAddress("not-an-email", EmailType.Private) });
 
         // Act

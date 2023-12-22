@@ -29,7 +29,10 @@ public class EmailAddressValidator : AbstractValidator<EmailAddress>
 {
     public EmailAddressValidator()
     {
-        RuleFor(email => email.Email).NotEmpty().EmailAddress();
+        RuleFor(email => email.Email)
+            .NotEmpty()
+            .EmailAddress()
+            .WithMessage("Не является действительным адресом электронной почты.");
         RuleFor(email => email.Type).IsInEnum();
     }
 }
