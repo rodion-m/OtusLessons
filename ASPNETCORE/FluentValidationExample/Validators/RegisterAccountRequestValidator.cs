@@ -1,14 +1,18 @@
 ﻿using FluentValidation;
-using ValidationLesson.Models;
+using ValidationLesson.Models.Requests;
 
 namespace ValidationLesson.Validators;
 
-public class AccountValidator : AbstractValidator<Account>
+public class RegisterAccountRequestValidator : AbstractValidator<RegisterAccountRequest>
 {
-    public AccountValidator()
+    public RegisterAccountRequestValidator()
     {
         RuleFor(account => account.FirstName).NotEmpty();
         RuleFor(account => account.LastName).NotEmpty();
+        RuleFor(account => account.Password).NotEmpty()
+            .MinimumLength(8)
+            .MaximumLength(20)
+            .WithMessage("Пароль должен быть не более 20 символов.");
         RuleFor(account => account.Address).SetValidator(new AddressValidator());
         RuleForEach(account => account.EmailAddresses).SetValidator(new EmailAddressValidator());
     }

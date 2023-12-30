@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ValidationLesson\ValidationLesson.csproj" />
+      <ProjectReference Include="..\FluentValidationExample\FluentValidationExample.csproj" />
     </ItemGroup>
 
 </Project>
