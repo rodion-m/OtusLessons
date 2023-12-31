@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Lesson14.Models.Requests;
+namespace ShopClientLib.Requests;
 
 public class LogInRequest
 {

@@ -21,7 +21,7 @@ internal static class HttpClientExtensions
         if (response.Content.Headers.ContentType?.MediaType == MediaTypeNames.Application.Json)
         {
             var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-            throw new ShopApiException(response.StatusCode, details);
+            throw new ShopApiException(response.StatusCode, details!);
         }
 
         var message = await response.Content.ReadAsStringAsync();

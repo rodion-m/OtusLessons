@@ -1,4 +1,4 @@
-﻿namespace Lesson14.Models.Responses;
+﻿namespace ShopClientLib.Responses;
 
 public class LogInResponse
 {

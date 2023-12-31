@@ -5,7 +5,7 @@ namespace ValidationLesson.Validators;
 
 public class RegisterAccountRequestValidator : AbstractValidator<RegisterAccountRequest>
 {
-    public RegisterAccountRequestValidator()
+    public RegisterAccountRequestValidator() //можно использовать DI, т. к. lifetime scoped
     {
         RuleFor(account => account.FirstName).NotEmpty();
         RuleFor(account => account.LastName).NotEmpty();
@@ -37,6 +37,6 @@ public class EmailAddressValidator : AbstractValidator<EmailAddress>
             .NotEmpty()
             .EmailAddress()
             .WithMessage("Не является действительным адресом электронной почты.");
-        RuleFor(email => email.Type).IsInEnum();
+        RuleFor(email => email.Type).IsInEnum(); //важно: https://www.oreilly.com/library/view/c-cookbook/0596003390/ch04s03.html
     }
 }

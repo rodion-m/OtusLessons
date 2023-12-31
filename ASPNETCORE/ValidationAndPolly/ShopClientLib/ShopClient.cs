@@ -1,25 +1,25 @@
 ﻿using System.Net.Http.Headers;
-using Lesson14.Models.Requests;
-using Lesson14.Models.Responses;
+using ShopClientLib.Requests;
+using ShopClientLib.Responses;
 
 namespace ShopClientLib;
 
-public class ShopClient : IDisposable
+public class ShopClient
 {
     private readonly string _host;
     private readonly HttpClient _httpClient;
     
-    // For DI AddHttpClient
+    // For DI `AddHttpClient`
     public ShopClient(HttpClient httpClient)
     {
         _host = "https://default/";
-        _httpClient = httpClient;
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
     public ShopClient(string host, HttpClient httpClient)
     {
-        _host = host;
-        _httpClient = httpClient;
+        _host = host ?? throw new ArgumentNullException(nameof(host));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
     public bool IsAuthorizationTokenSet { get; private set; }
@@ -40,6 +40,7 @@ public class ShopClient : IDisposable
 
     public async Task<RegisterResponse> Register(RegisterRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
         var response = await _httpClient.PostAsJsonAsync<RegisterRequest, RegisterResponse>(
             $"{_host}/auth/register", request);
 
@@ -50,16 +51,12 @@ public class ShopClient : IDisposable
 
     public async Task<LogInResponse> LogIn(LogInRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
         LogInResponse? response = await _httpClient.PostAsJsonAsync<LogInRequest, LogInResponse>(
             $"{_host}/auth/login", request);
         
         SetAuthorizationToken(response!.Token);
         
         return response;
-    }
-
-    public void Dispose()
-    {
-        _httpClient.Dispose();
     }
 }
