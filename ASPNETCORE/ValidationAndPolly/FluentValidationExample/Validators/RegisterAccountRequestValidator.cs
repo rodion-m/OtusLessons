@@ -5,7 +5,7 @@ namespace ValidationLesson.Validators;
 
 public class RegisterAccountRequestValidator : AbstractValidator<RegisterAccountRequest>
 {
-    public RegisterAccountRequestValidator() //можно использовать DI, т. к. lifetime scoped
+    public RegisterAccountRequestValidator() //можно использовать DI, т. к. lifetime Scoped
     {
         RuleFor(account => account.FirstName).NotEmpty();
         RuleFor(account => account.LastName).NotEmpty();
