@@ -10,9 +10,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddMediatR(cfg =>
 {
-    //Обычно все обработчики событий находятся в слое Application
+    // Регистрация всех обработчиков (команд и запросов) из текущей сборки
     cfg.RegisterServicesFromAssemblyContaining<Program>();
     
+    // Регистрация поведения логирования
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
