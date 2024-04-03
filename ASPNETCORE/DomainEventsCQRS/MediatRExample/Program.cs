@@ -1,3 +1,5 @@
+using MediatRExample.Application.Behaviors;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +12,8 @@ builder.Services.AddMediatR(cfg =>
 {
     //Обычно все обработчики событий находятся в слое Application
     cfg.RegisterServicesFromAssemblyContaining<Program>();
+    
+    cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 var app = builder.Build();
